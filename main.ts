@@ -77,7 +77,6 @@ export class DurableCPUProcessor {
   private state: DurableObjectState;
   private data: {
     primes: number[];
-    startTime: number;
     running: boolean;
   };
   private controller: AbortController | null = null;
@@ -86,7 +85,6 @@ export class DurableCPUProcessor {
     this.state = state;
     this.data = {
       primes: [],
-      startTime: Date.now(),
       running: false,
     };
   }
@@ -101,8 +99,6 @@ export class DurableCPUProcessor {
         return new Response("CPU task already running", { status: 200 });
       }
 
-      this.data.running = true;
-      this.data.startTime = Date.now();
       this.data.primes = [];
 
       // Create a new abort controller for this run
@@ -115,23 +111,16 @@ export class DurableCPUProcessor {
       return new Response("CPU task started", { status: 200 });
     } else if (url.pathname === "/ping") {
       // Return the current state
-      const runTimeSeconds = Math.floor(
-        (Date.now() - this.data.startTime) / 1000,
-      );
 
       return new Response(
         JSON.stringify({
-          running: this.data.running,
           primeCount: this.data.primes.length,
           lastPrime:
             this.data.primes.length > 0
               ? this.data.primes[this.data.primes.length - 1]
               : null,
-          runTimeSeconds: runTimeSeconds,
         }),
-        {
-          headers: { "Content-Type": "application/json" },
-        },
+        { headers: { "Content-Type": "application/json" } },
       );
     } else if (url.pathname === "/stop") {
       if (this.controller) {
