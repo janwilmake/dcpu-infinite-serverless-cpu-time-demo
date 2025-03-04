@@ -1,5 +1,5 @@
 name = "durable-cpu-demo"
-main = "main.ts"
+main = "main2.ts"
 compatibility_date = "2025-03-01"
 dev.port = 3000
 # Configure the Durable Object
