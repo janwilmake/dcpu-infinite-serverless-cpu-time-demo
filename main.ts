@@ -1,3 +1,4 @@
+// src/index.ts
 export interface Env {
   DURABLE_CPU: DurableObjectNamespace;
 }
@@ -75,10 +76,7 @@ export default {
 export class DurableCPUProcessor {
   private state: DurableObjectState;
   private data: {
-    calculations: number;
     primes: number[];
-    fibonacciNumbers: number[];
-    memoryUsage: number;
     startTime: number;
     running: boolean;
   };
@@ -87,10 +85,7 @@ export class DurableCPUProcessor {
   constructor(state: DurableObjectState) {
     this.state = state;
     this.data = {
-      calculations: 0,
       primes: [],
-      fibonacciNumbers: [],
-      memoryUsage: 0,
       startTime: Date.now(),
       running: false,
     };
@@ -108,9 +103,7 @@ export class DurableCPUProcessor {
 
       this.data.running = true;
       this.data.startTime = Date.now();
-      this.data.calculations = 0;
       this.data.primes = [];
-      this.data.fibonacciNumbers = [];
 
       // Create a new abort controller for this run
       this.controller = new AbortController();
@@ -129,21 +122,11 @@ export class DurableCPUProcessor {
       return new Response(
         JSON.stringify({
           running: this.data.running,
-          calculations: this.data.calculations,
           primeCount: this.data.primes.length,
-          fibCount: this.data.fibonacciNumbers.length,
           lastPrime:
             this.data.primes.length > 0
               ? this.data.primes[this.data.primes.length - 1]
               : null,
-          lastFib:
-            this.data.fibonacciNumbers.length > 0
-              ? this.data.fibonacciNumbers[
-                  this.data.fibonacciNumbers.length - 1
-                ]
-              : null,
-          memoryUsageMB:
-            Math.round((this.data.memoryUsage / (1024 * 1024)) * 100) / 100,
           runTimeSeconds: runTimeSeconds,
         }),
         {
@@ -166,18 +149,8 @@ export class DurableCPUProcessor {
   private async startCPUIntensiveTask(signal: AbortSignal) {
     try {
       while (!signal.aborted) {
-        // Do some CPU-intensive calculations
-        // 1. Find prime numbers (a classic CPU-heavy task)
+        // Find the next prime number (CPU-intensive operation)
         this.findNextPrime();
-
-        // 2. Calculate Fibonacci numbers
-        this.calculateNextFibonacci();
-
-        // 3. Growing object in memory (storing results)
-        this.data.calculations++;
-
-        // 4. Estimate memory usage
-        this.estimateMemoryUsage();
 
         // Yield to allow handling of incoming pings (crucial for extending CPU time)
         // This ensures we're not in a tight CPU loop that would prevent pings from being handled
@@ -190,7 +163,7 @@ export class DurableCPUProcessor {
     }
   }
 
-  // Find the next prime number
+  // Find the next prime number with deliberately CPU-intensive operations
   private findNextPrime() {
     const start =
       this.data.primes.length > 0
@@ -204,7 +177,7 @@ export class DurableCPUProcessor {
       // Check if current number is divisible by any number up to its square root
       for (let i = 2; i <= sqrt; i++) {
         // Do extra calculations to make this more CPU intensive
-        for (let j = 0; j < 1000; j++) {
+        for (let j = 0; j < 5000; j++) {
           (Math.pow(i, 2) * Math.log(current)) / Math.sin(j * 0.01);
         }
 
@@ -217,49 +190,6 @@ export class DurableCPUProcessor {
       // If we get here, current is prime
       this.data.primes.push(current);
       break;
-    }
-  }
-
-  // Calculate the next Fibonacci number
-  private calculateNextFibonacci() {
-    const length = this.data.fibonacciNumbers.length;
-
-    if (length === 0) {
-      this.data.fibonacciNumbers.push(0);
-    } else if (length === 1) {
-      this.data.fibonacciNumbers.push(1);
-    } else {
-      // Do some extra calculations to make this CPU intensive
-      let sum = 0;
-      for (let i = 0; i < 5000; i++) {
-        sum += Math.tan(i * 0.01) * Math.exp(Math.sin(i * 0.01));
-      }
-
-      const nextFib =
-        this.data.fibonacciNumbers[length - 1] +
-        this.data.fibonacciNumbers[length - 2];
-      this.data.fibonacciNumbers.push(nextFib);
-    }
-  }
-
-  // Estimate memory usage by creating temporary objects
-  private estimateMemoryUsage() {
-    try {
-      // Create a large object to measure
-      const tempArray = new Array(100000)
-        .fill(0)
-        .map((_, i) => ({ index: i, value: Math.random() }));
-
-      // Stringify the data to get a rough estimate of its size
-      const jsonString = JSON.stringify(this.data);
-      this.data.memoryUsage = jsonString.length;
-
-      // Do something with tempArray to prevent it from being optimized away
-      for (let i = 0; i < 1000; i++) {
-        tempArray[i % tempArray.length].value += Math.random();
-      }
-    } catch (e) {
-      console.error("Memory estimation error:", e);
     }
   }
 }

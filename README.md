@@ -44,7 +44,7 @@ This implementation creates a Cloudflare Worker with a Durable Object that perfo
 
 2. **Durable Object (`DurableCPUProcessor`)**:
 
-   - Performs CPU-intensive calculations (finding prime numbers, calculating Fibonacci numbers)
+   - Performs CPU-intensive calculations (finding prime numbers)
    - Maintains state in memory, continuously growing the data structures
    - Yields control periodically using `await new Promise(resolve => setTimeout(resolve, 0))` to allow handling of incoming ping requests
    - Responds to ping requests with its current state
@@ -70,11 +70,11 @@ The `-N` flag is important as it disables buffering, allowing you to see the str
 
 1. **CPU Time Extension**: The Durable Object's CPU time limit gets reset every time it receives a ping request, allowing it to run indefinitely.
 
-2. **CPU-Intensive Tasks**: The implementation includes deliberately CPU-intensive tasks like finding prime numbers with extra calculations, computing Fibonacci numbers, and creating large objects in memory.
+2. **CPU-Intensive Tasks**: The implementation includes deliberately CPU-intensive task: finding prime numbers with extra calculations.
 
 3. **Yielding Control**: The code includes strategic pauses (`setTimeout(resolve, 0)`) to yield control to the event loop, allowing it to process incoming ping requests.
 
-4. **Memory Growth**: The object grows in memory by storing all calculated primes and Fibonacci numbers, and by estimating its own memory usage.
+4. **Memory Growth**: The object grows in memory by storing all calculated primes numbers, and by estimating its own memory usage.
 
 5. **Monitoring**: The Worker streams updates back to the client, showing the current state of the calculations and memory usage.
 
