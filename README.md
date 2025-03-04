@@ -4,6 +4,8 @@ After [figuring out](https://x.com/irvinebroque/status/1896942190997483664) both
 
 Let's make an independent example where this is done.
 
+This approach essentially "cheats" the 30-second CPU limit by creating a continuous operation that can run for hours or even days, limited only by memory constraints and the reliability of the ping mechanism.
+
 ## Context:
 
 > Jan: A cap of 30 seconds CPU-time is not acceptable for serverless. Crazy that this is still the highest cloudflare will go! Vercel offers up to 300s though on pro, so likely, I'll go with that, bit it's dangerously expensive if it goes wrong 🫠 Anyone knows if enterprise offers higher limits on CPU-time at Cloudflare?
