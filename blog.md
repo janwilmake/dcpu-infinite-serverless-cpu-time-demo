@@ -135,6 +135,6 @@ Cloudflare's 30-second CPU limit for serverless functions is a significant const
 
 This approach essentially "cheats" the 30-second CPU limit by creating a continuous operation that can run for hours or even days, limited only by memory constraints and the reliability of the ping mechanism.
 
-I've published this technique as a package called "DCPU" which you can use in your own projects. Check out the [repository](https://github.com/yourusername/dcpu) for more details.
+I've published this technique as a package called "DCPU" which you can use in your own projects. Check out the [repository](https://github.com/janwilmake/dcpu) for more details.
 
 As the saying goes in the Cloudflare community, Durable Objects somehow always end up being the answer 😄
