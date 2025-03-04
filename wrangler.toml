@@ -1,0 +1,14 @@
+name = "durable-cpu-demo"
+main = "main.ts"
+compatibility_date = "2025-03-01"
+dev.port = 3000
+# Configure the Durable Object
+[durable_objects]
+bindings = [
+  { name = "DURABLE_CPU", class_name = "DurableCPUProcessor" }
+]
+
+# Define migrations for the Durable Object
+[[migrations]]
+tag = "v1"
+new_classes = ["DurableCPUProcessor"]
