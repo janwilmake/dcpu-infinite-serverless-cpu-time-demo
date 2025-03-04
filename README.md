@@ -24,11 +24,9 @@ This approach essentially "cheats" the 30-second CPU limit by creating a continu
 
 > Jan: Oh this is great thanks Kenton, I will try it and let you know if it worked. It seems DO is always the answer somehow ^^
 
-# Prompt:
+# Specification:
 
-Please implement a typescript cloudflare worker that has a durable object that performs CPU heavy operation and does not stop, that grows a JS object in memory. It should accept a GET request /ping and send back the intermediate state. Ensure the CPU operations are heavy, and go on for at least 5 minutes. The worker fetch entrypoint initiates the DO and pings it every second to see the intermediate state, and streams this back in a ReadableStream so I can curl it.
-
-Give me the worker implementation, the wrangler.toml, and the curl I can use
+I want a typescript cloudflare worker that has a durable object that performs CPU heavy operation and does not stop, that grows a JS object in memory. It should accept a GET request /ping and send back the intermediate state. Ensure the CPU operations are heavy, and go on for at least 5 minutes. The worker fetch entrypoint initiates the DO and pings it every second to see the intermediate state, and streams this back in a ReadableStream so I can curl it.
 
 # Result:
 
