@@ -30,8 +30,6 @@ I want a typescript cloudflare worker that has a durable object that performs CP
 
 # Result:
 
-I'll create a Cloudflare Worker with a Durable Object that performs CPU-heavy operations continuously while allowing periodic pings to check its state. The solution includes streaming the intermediate state back to the client.
-
 ## How It Works
 
 This implementation creates a Cloudflare Worker with a Durable Object that performs CPU-intensive operations without interruption. Here's how it works:
